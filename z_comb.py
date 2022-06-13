@@ -64,6 +64,8 @@ mkrec_nice_7_2 = lambda g: (
 # Y = mkrec_nice_7_2
 # Y(g) = (lambda r: g(lambda y: r(r)(y)))(lambda r: g(lambda y: r(r)(y)))
 # Y(g) = g(lambda y: (lambda r: g(lambda y: r(r)(y)))(lambda r: g(lambda y: r(r)(y)))(y))
+# We can step inside the function g!
+# Then when we get to the recursive call it'll repeat itself!
 fact7_2 = mkrec_nice_7_2(lambda rec_nice: lambda x: 1 if x == 0 else rec_nice(x - 1) * x)
 
 # The real y-combinator, it will spin out of control given that python eagerly evaluates
