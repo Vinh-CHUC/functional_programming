@@ -51,3 +51,34 @@ mkrec_nice = lambda g: (
     )
 )
 fact7 = mkrec_nice(lambda rec_nice: lambda x: 1 if x == 0 else rec_nice(x - 1) * x)
+
+# Abstracting the inner self application, making the self-application more explicit
+mkrec_nice_7_2 = lambda g: (
+    (
+        lambda rec: g(lambda y: rec(rec)(y))
+    )
+    (
+        lambda rec: g(lambda y: rec(rec)(y))
+    )
+)
+# Y = mkrec_nice_7_2
+# Y(g) = (lambda r: g(lambda y: r(r)(y)))(lambda r: g(lambda y: r(r)(y)))
+# Y(g) = g(lambda y: (lambda r: g(lambda y: r(r)(y)))(lambda r: g(lambda y: r(r)(y)))(y))
+fact7_2 = mkrec_nice_7_2(lambda rec_nice: lambda x: 1 if x == 0 else rec_nice(x - 1) * x)
+
+# The real y-combinator, it will spin out of control given that python eagerly evaluates
+mkrec_nice8 = lambda g: (
+    (
+        lambda rec: g(rec(rec))
+    )
+    (
+        lambda rec: g(rec(rec))
+    )
+)
+# Y = mkrec_nice8
+# Y(g) = (lambda r: g(r(r)))(lambda r: g(r(r)))
+# Y(g) = g((lambda r: g(r(r)))(lambda r: g(r(r)))) = Y(Y(f))
+# g is kind of irrelevant here it chould have 0 arguments, but as the language is lazy this will
+# never terminate = by lazy here is that we try to fully evaluate the leaves of the tree 
+# No dangling
+fact8 = mkrec_nice8(lambda rec_nice: lambda x: 1 if x == 0 else rec_nice(x - 1) * x)
