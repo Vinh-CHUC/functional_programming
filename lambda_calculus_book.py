@@ -1,3 +1,11 @@
+# Logic
+def make_pair(a, b):
+    return lambda f: f(a, b)
+P=make_pair(1, 2)
+P(lambda x, y: x)
+
+# Recursion
+
 import functools
 
 def fac(n):
