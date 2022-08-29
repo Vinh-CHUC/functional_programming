@@ -27,7 +27,17 @@ class Tree(Generic[T]):
             Tree(np.random.randint(0, 50, 1)[0], None, None)
         )
 
-    def to_graphviz(self):
+    def inorder(self, root: Optional["Tree[T]"] = None) -> Iterable[T]:
+        if not root:
+            root = self
+
+        return [
+            *(self.inorder(root.left) if root.left else []),
+            root.val,
+            *(self.inorder(root.right) if root.right else [])
+        ]
+
+    def _generate_graphviz_dot(self):
         def _helper(tree: "Tree[T]", dot):
             if tree.left:
                 dot.edge(str(tree.val), str(tree.left.val))
@@ -47,6 +57,10 @@ class Tree(Generic[T]):
 
         dot = graphviz.Digraph()
         _helper(self, dot)
+        return dot
+
+    def to_graphviz(self):
+        dot = self._generate_graphviz_dot()
         return dot.render(tempfile.NamedTemporaryFile(delete=False, prefix="graphviz").name)
 
 
